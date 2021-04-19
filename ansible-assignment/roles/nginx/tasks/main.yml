@@ -1,0 +1,16 @@
+# nginx on Ubuntu
+- name: Install nginx on Ubuntu
+  apt:
+    name: "{{ nginx }}"
+    state: present
+    update_cache: true
+  when: ansible_facts['distribution'] == "Ubuntu" 
+  notify:
+    - start nginx
+
+# nginx on Linux
+- name: Install nginx on Linux
+  command: amazon-linux-extras install nginx1 -y
+  when: ansible_facts['distribution'] == "Amazon" 
+  notify:
+    - start nginx

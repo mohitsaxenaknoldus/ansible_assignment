@@ -1,0 +1,47 @@
+# Jenkins on Ubunntu
+- name: Install Java 8
+  apt:
+    name: "{{ java_ubuntu }}"
+    state: present
+    update_cache: true
+  when: ansible_facts['distribution'] == "Ubuntu" 
+
+- name: Add the repository key to the system
+  ansible.builtin.apt_key:
+    url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+    state: present
+  when: ansible_facts['distribution'] == "Ubuntu" 
+
+- name: Append the Debian package repository address to the server’s sources.list
+  command: sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+  when: ansible_facts['distribution'] == "Ubuntu" 
+      
+- name: Install Jenkins
+  apt:
+    name: "{{ jenkins }}"
+    state: present
+    update_cache: true
+  when: ansible_facts['distribution'] == "Ubuntu" 
+  notify: start jenkins
+
+# Jenkins on Linux
+- name: Install Java8 on Linux
+  yum: pkg="{{ java_linux }}" state=present
+  when: ansible_facts['distribution'] == "Amazon" 
+
+- name: Add Jenkins repo
+  get_url:
+    url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+    dest: /etc/yum.repos.d/jenkins.repo
+  when: ansible_facts['distribution'] == "Amazon" 
+
+- name: Import key file
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://pkg.jenkins.io/redhat/jenkins.io.key
+  when: ansible_facts['distribution'] == "Amazon" 
+
+- name: Install Jenkins
+  yum: pkg="{{ jenkins }}" state=present
+  when: ansible_facts['distribution'] == "Amazon" 
+  notify: start jenkins

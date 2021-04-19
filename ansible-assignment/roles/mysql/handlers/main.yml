@@ -1,0 +1,9 @@
+- name: Run MySQL
+  service:
+    name: mysql
+    state: started
+
+- name: Run MySQL Linux
+  service:
+    name: mariadb
+    state: started

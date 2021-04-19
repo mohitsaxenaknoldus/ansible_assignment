@@ -1,0 +1,14 @@
+--- #Master YAML
+- hosts: all
+  become: true
+  gather_facts: true
+  # tasks:
+  #   - name: Print distribution
+  #     ansible.builtin.debug:
+  #       var: ansible_facts['distribution']
+  roles:
+    - docker
+    #- jenkins
+    #- mysql
+    #- nginx
+...

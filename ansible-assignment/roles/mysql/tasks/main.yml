@@ -1,0 +1,15 @@
+# Install MySQL on Ubuntu
+- name: Update repo
+  command: apt update
+  when: ansible_facts['distribution'] == "Ubuntu" 
+
+- name: Install MySQL Server
+  yum: pkg="{{ mysql_ubuntu }}" state=present 
+  notify: Run MySQL
+  when: ansible_facts['distribution'] == "Ubuntu" 
+
+# Install MySQL on Linux
+- name: Install MySQL
+  yum: pkg="{{ mysql_linux }}" state=present 
+  when: ansible_facts['distribution'] == "Amazon" 
+  notify: Run MySQL Linux
